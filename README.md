@@ -1,70 +1,124 @@
-# Getting Started with Create React App
+# 🔄 Simulador de Concorrência - React
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Aplicação web interativa para aprender conceitos de concorrência e sincronização através de visualizações animadas.
 
-## Available Scripts
+## 🚀 Como Executar
 
-In the project directory, you can run:
+### 1. Criar o Projeto
 
-### `npm start`
+```bash
+npx create-react-app concurrency-simulator
+cd concurrency-simulator
+```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### 2. Instalar Dependências
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+```bash
+npm install react-router-dom framer-motion lucide-react
+npm install -D tailwindcss postcss autoprefixer
+npx tailwindcss init -p
+```
 
-### `npm test`
+### 3. Configurar Tailwind CSS
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Edite `tailwind.config.js`:
 
-### `npm run build`
+```javascript
+module.exports = {
+  content: ["./src/**/*.{js,jsx,ts,tsx}"],
+  theme: { extend: {} },
+  plugins: [],
+}
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### 4. Copiar Arquivos
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Copie cada seção deste arquivo para os respectivos arquivos:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```
+src/
+├── App.js
+├── index.js
+├── index.css
+├── components/
+│   ├── Button.jsx
+│   ├── Slider.jsx
+│   ├── Card.jsx
+│   └── PageHeader.jsx
+└── pages/
+    ├── HomePage.jsx
+    ├── TrafficLightsPage.jsx
+    ├── LibraryPage.jsx
+    ├── ProducerConsumerPage.jsx
+    ├── PhilosophersPage.jsx
+    └── ConcurrencyVsParallelismPage.jsx
+```
 
-### `npm run eject`
+### 5. Executar
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+```bash
+npm start
+```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Acesse: http://localhost:3000
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## 🎯 Simulações Disponíveis
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### 1. 🚦 Semáforos de Trânsito
+- Demonstra exclusão mútua (Mutex)
+- Threading.Condition com wait() e notify()
 
-## Learn More
+### 2. 📚 Biblioteca (Semáforo Contador)
+- Pool de recursos (10 salas)
+- Threading.Semaphore com acquire() e release()
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### 3. 🏭 Produtor-Consumidor
+- Buffer compartilhado de tamanho limitado
+- Sincronização entre produtor e consumidor
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### 4. 🍝 Filósofos Jantando
+- Problema clássico de deadlock
+- Solução com quebra de circularidade
 
-### Code Splitting
+### 5. ⚡ Concorrência vs Paralelismo
+- Visualização da diferença conceitual
+- Time-sharing vs execução paralela
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## 🛠️ Tecnologias
 
-### Analyzing the Bundle Size
+- **React 18**: Framework UI
+- **React Router**: Navegação entre páginas
+- **Framer Motion**: Animações suaves
+- **Tailwind CSS**: Estilização
+- **Lucide React**: Ícones
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## 📝 Estrutura do Código
 
-### Making a Progressive Web App
+Cada simulação é uma página independente que pode ser:
+- Pausada/Retomada
+- Reiniciada
+- Configurada (velocidades, tamanhos, etc.)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+Componentes reutilizáveis:
+- `Button`: Botões com ícones e variantes
+- `Slider`: Controles deslizantes
+- `Card`: Container com sombra
+- `PageHeader`: Cabeçalho com navegação
 
-### Advanced Configuration
+## 🎓 Uso Educacional
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+Este simulador é ideal para:
+- Aulas de Sistemas Operacionais
+- Programação Concorrente
+- Arquitetura de Computadores
+- Workshops e palestras
 
-### Deployment
+Cada simulação inclui explicação do conceito e técnicas utilizadas.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+## 📄 Licença
 
-### `npm run build` fails to minify
+Livre para uso educacional.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+---
+
+**Criado com ❤️ para ensinar concorrência de forma visual e interativa!**
