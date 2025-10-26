@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Traffic, Book, Factory, UtensilsCrossed, Zap, ArrowRight } from 'lucide-react';
+import { TrafficCone, Book, Factory, UtensilsCrossed, Zap, ArrowRight } from 'lucide-react';
 import Card from '../components/Card';
 
 const HomePage = () => {
@@ -11,7 +11,7 @@ const HomePage = () => {
     {
       title: 'Semáforos de Trânsito',
       description: 'Demonstra exclusão mútua com mutex/condition',
-      icon: Traffic,
+      icon: TrafficCone,
       color: 'bg-red-500',
       path: '/semaforos'
     },

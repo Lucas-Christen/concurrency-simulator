@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { Play, Pause, RotateCcw, Traffic } from 'lucide-react';
+import { Play, Pause, RotateCcw, TrafficCone } from 'lucide-react';
 import Button from '../components/Button';
 import Slider from '../components/Slider';
 import Card from '../components/Card';
@@ -102,7 +102,7 @@ const TrafficLightsPage = () => {
   return (
     <div className="min-h-screen bg-gray-100 p-8">
       <div className="max-w-7xl mx-auto">
-        <PageHeader title="Semáforos de Trânsito" icon={Traffic} />
+        <PageHeader title="Semáforos de Trânsito" icon={TrafficCone} />
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <Card className="lg:col-span-2">
