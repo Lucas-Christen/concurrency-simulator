@@ -6,6 +6,8 @@ import LibraryPage from './pages/LibraryPage';
 import ProducerConsumerPage from './pages/ProducerConsumerPage';
 import PhilosophersPage from './pages/PhilosophersPage';
 import ConcurrencyVsParallelismPage from './pages/ConcurrencyVsParallelismPage';
+import MutexPage from './pages/MutexPage';
+import BarrierPage from './pages/BarrierPage';
 
 function App() {
   return (
@@ -17,6 +19,8 @@ function App() {
         <Route path="/produtor-consumidor" element={<ProducerConsumerPage />} />
         <Route path="/filosofos" element={<PhilosophersPage />} />
         <Route path="/concorrencia-paralelismo" element={<ConcurrencyVsParallelismPage />} />
+        <Route path="/mutex" element={<MutexPage />} />
+        <Route path="/barreira" element={<BarrierPage />} />
       </Routes>
     </Router>
   );

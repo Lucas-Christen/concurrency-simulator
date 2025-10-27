@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { TrafficCone, Book, Factory, UtensilsCrossed, Zap, ArrowRight } from 'lucide-react';
+import { TrafficCone, Book, Factory, UtensilsCrossed, Zap, ArrowRight, Lock, Shield } from 'lucide-react';
 import Card from '../components/Card';
 
 const HomePage = () => {
@@ -42,6 +42,20 @@ const HomePage = () => {
       icon: Zap,
       color: 'bg-yellow-500',
       path: '/concorrencia-paralelismo'
+    },
+    {
+      title: 'Mutex (Exclusão Mútua)',
+      description: 'Controle de acesso à região crítica',
+      icon: Lock,
+      color: 'bg-indigo-500',
+      path: '/mutex'
+    },
+    {
+      title: 'Barreiras de Sincronização',
+      description: 'Threads esperam umas pelas outras',
+      icon: Shield,
+      color: 'bg-pink-500',
+      path: '/barreira'
     },
   ];
 
