@@ -8,6 +8,7 @@ import PhilosophersPage from './pages/PhilosophersPage';
 import ConcurrencyVsParallelismPage from './pages/ConcurrencyVsParallelismPage';
 import MutexPage from './pages/MutexPage';
 import BarrierPage from './pages/BarrierPage';
+import StaticDynamicListPage from './pages/StaticDynamicListPage'; // <-- Importar
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Route path="/concorrencia-paralelismo" element={<ConcurrencyVsParallelismPage />} />
         <Route path="/mutex" element={<MutexPage />} />
         <Route path="/barreira" element={<BarrierPage />} />
+        <Route path="/listas" element={<StaticDynamicListPage />} /> {/* <-- Nova Rota */}
       </Routes>
     </Router>
   );

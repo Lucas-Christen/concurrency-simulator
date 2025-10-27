@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Play, Pause, RotateCcw, Factory, TrendingUp, TrendingDown } from 'lucide-react';
+import { RotateCcw, Factory, TrendingUp, TrendingDown, PackagePlus, PackageMinus } from 'lucide-react'; // Ícones atualizados
 import Button from '../components/Button';
 import Slider from '../components/Slider';
 import Card from '../components/Card';
@@ -8,57 +8,76 @@ import PageHeader from '../components/PageHeader';
 
 const ProducerConsumerPage = () => {
   const [buffer, setBuffer] = useState([]);
-  const [paused, setPaused] = useState(false);
   const [stats, setStats] = useState({ produced: 0, consumed: 0 });
-  const [config, setConfig] = useState({
-    bufferSize: 8,
-    produceRate: 1,
-    consumeRate: 1.5
-  });
+  const [config, setConfig] = useState({ bufferSize: 8 }); // Apenas bufferSize é configurável agora
+  const [feedback, setFeedback] = useState({ message: '', type: '' }); // Para mensagens como "Buffer cheio"
   const itemIdRef = useRef(0);
 
-  useEffect(() => {
-    if (paused) return;
+  const showFeedback = (message, type, duration = 1500) => {
+    setFeedback({ message, type });
+    setTimeout(() => setFeedback({ message: '', type: '' }), duration);
+  };
 
-    // Producer
-    const producerInterval = setInterval(() => {
-      setBuffer(prev => {
-        if (prev.length >= config.bufferSize) return prev;
-        const id = ++itemIdRef.current;
-        setStats(s => ({ ...s, produced: s.produced + 1 }));
-        const colors = ['#EF4444', '#3B82F6', '#10B981', '#F59E0B', '#8B5CF6', '#EC4899'];
-        return [...prev, { 
-          id, 
-          color: colors[Math.floor(Math.random() * colors.length)]
-        }];
-      });
-    }, config.produceRate * 1000);
+  // --- Lógica Manual ---
+  const handleProduce = () => {
+    if (buffer.length >= config.bufferSize) {
+      showFeedback('Buffer Cheio! Não é possível produzir.', 'error');
+      return;
+    }
+    const id = ++itemIdRef.current;
+    setStats(s => ({ ...s, produced: s.produced + 1 }));
+    const colors = ['#EF4444', '#3B82F6', '#10B981', '#F59E0B', '#8B5CF6', '#EC4899'];
+    setBuffer(prev => [...prev, {
+      id,
+      color: colors[id % colors.length] // Mantém a cor aleatória
+    }]);
+     showFeedback(`Item ${id} produzido!`, 'success');
+  };
 
-    // Consumer
-    const consumerInterval = setInterval(() => {
-      setBuffer(prev => {
-        if (prev.length === 0) return prev;
-        setStats(s => ({ ...s, consumed: s.consumed + 1 }));
-        return prev.slice(1);
-      });
-    }, config.consumeRate * 1000);
+  const handleConsume = () => {
+    if (buffer.length === 0) {
+      showFeedback('Buffer Vazio! Não é possível consumir.', 'error');
+      return;
+    }
+    const consumedItem = buffer[0];
+    setStats(s => ({ ...s, consumed: s.consumed + 1 }));
+    setBuffer(prev => prev.slice(1));
+    showFeedback(`Item ${consumedItem.id} consumido!`, 'success');
+  };
 
-    return () => {
-      clearInterval(producerInterval);
-      clearInterval(consumerInterval);
-    };
-  }, [paused, config]);
-
+  // --- Reset ---
   const handleReset = () => {
     setBuffer([]);
     setStats({ produced: 0, consumed: 0 });
     itemIdRef.current = 0;
+    setFeedback({ message: '', type: '' });
+     showFeedback('Simulação Reiniciada.', 'info');
   };
+
+  // --- Determinar cores de feedback ---
+   let feedbackColorClass = '';
+   if (feedback.type === 'error') feedbackColorClass = 'bg-red-100 text-red-700 border-red-300';
+   if (feedback.type === 'success') feedbackColorClass = 'bg-green-100 text-green-700 border-green-300';
+   if (feedback.type === 'info') feedbackColorClass = 'bg-blue-100 text-blue-700 border-blue-300';
+
 
   return (
     <div className="min-h-screen bg-gray-100 p-8">
       <div className="max-w-7xl mx-auto">
-        <PageHeader title="Produtor-Consumidor" icon={Factory} />
+        <PageHeader title="Produtor-Consumidor (Manual)" icon={Factory} />
+
+        <AnimatePresence>
+          {feedback.message && (
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className={`mb-4 p-3 rounded border text-center font-semibold ${feedbackColorClass}`}
+            >
+              {feedback.message}
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <Card className="lg:col-span-2">
@@ -66,14 +85,22 @@ const ProducerConsumerPage = () => {
               {/* Produtor */}
               <div className="flex items-center gap-4">
                 <motion.div
-                  animate={{ scale: [1, 1.1, 1] }}
-                  transition={{ repeat: Infinity, duration: config.produceRate }}
+                  // Animação removida ou alterada, já que não é mais baseada em tempo
                   className="w-28 h-28 bg-gradient-to-br from-blue-500 to-blue-700 rounded-full flex flex-col items-center justify-center text-white font-bold shadow-xl"
                 >
                   <Factory size={32} />
                   <span className="text-sm mt-1">Produtor</span>
                 </motion.div>
+                 <Button
+                    onClick={handleProduce}
+                    variant="success"
+                    icon={PackagePlus}
+                    disabled={buffer.length >= config.bufferSize}
+                 >
+                    Produzir Item
+                 </Button>
                 <motion.div
+                  // Animação pode ser mantida se desejado
                   animate={{ x: [0, 10, 0] }}
                   transition={{ repeat: Infinity, duration: 1 }}
                   className="text-gray-400"
@@ -92,9 +119,11 @@ const ProducerConsumerPage = () => {
                     {buffer.map(item => (
                       <motion.div
                         key={item.id}
-                        initial={{ scale: 0, x: -50, opacity: 0 }}
-                        animate={{ scale: 1, x: 0, opacity: 1 }}
-                        exit={{ scale: 0, x: 50, opacity: 0 }}
+                        layout // Adiciona animação suave ao adicionar/remover
+                        initial={{ scale: 0, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        exit={{ scale: 0, opacity: 0 }}
+                        transition={{ type: 'spring', stiffness: 500, damping: 30 }}
                         className="w-16 h-16 rounded-lg flex items-center justify-center text-white font-bold shadow-lg"
                         style={{ backgroundColor: item.color }}
                       >
@@ -102,17 +131,21 @@ const ProducerConsumerPage = () => {
                       </motion.div>
                     ))}
                   </AnimatePresence>
+                  {/* Renderiza espaços vazios */}
                   {Array(config.bufferSize - buffer.length).fill(0).map((_, i) => (
-                    <div 
-                      key={`empty-${i}`} 
-                      className="w-16 h-16 rounded-lg border-2 border-dashed border-gray-400 bg-white/50" 
+                    <div
+                      key={`empty-${i}`}
+                      className="w-16 h-16 rounded-lg border-2 border-dashed border-gray-400 bg-white/50"
                     />
                   ))}
                 </div>
-                <div className="mt-4 flex justify-between text-sm text-gray-600">
-                  <span>↓ Produzindo a cada {config.produceRate}s</span>
-                  <span>Consumindo a cada {config.consumeRate}s ↓</span>
-                </div>
+                 {/* Mensagens de estado do buffer */}
+                 {buffer.length === config.bufferSize && (
+                   <p className="mt-4 text-center text-red-600 font-semibold">Buffer Cheio!</p>
+                 )}
+                 {buffer.length === 0 && (
+                   <p className="mt-4 text-center text-blue-600 font-semibold">Buffer Vazio!</p>
+                 )}
               </div>
 
               {/* Consumidor */}
@@ -124,9 +157,16 @@ const ProducerConsumerPage = () => {
                 >
                   <TrendingDown size={40} />
                 </motion.div>
+                 <Button
+                    onClick={handleConsume}
+                    variant="warning"
+                    icon={PackageMinus}
+                    disabled={buffer.length === 0}
+                 >
+                    Consumir Item
+                 </Button>
                 <motion.div
-                  animate={{ scale: [1, 1.1, 1] }}
-                  transition={{ repeat: Infinity, duration: config.consumeRate }}
+                  // Animação removida ou alterada
                   className="w-28 h-28 bg-gradient-to-br from-green-500 to-green-700 rounded-full flex flex-col items-center justify-center text-white font-bold shadow-xl"
                 >
                   <Factory size={32} />
@@ -135,15 +175,16 @@ const ProducerConsumerPage = () => {
               </div>
             </div>
 
+            {/* Estatísticas */}
             <div className="mt-6 grid grid-cols-2 gap-4">
-              <motion.div 
+              <motion.div
                 whileHover={{ scale: 1.05 }}
                 className="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-lg text-center border-2 border-blue-200"
               >
                 <div className="text-sm text-gray-600 font-semibold">Itens Produzidos</div>
                 <div className="text-4xl font-bold text-blue-600 mt-2">{stats.produced}</div>
               </motion.div>
-              <motion.div 
+              <motion.div
                 whileHover={{ scale: 1.05 }}
                 className="bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-lg text-center border-2 border-green-200"
               >
@@ -153,23 +194,18 @@ const ProducerConsumerPage = () => {
             </div>
           </Card>
 
+          {/* Painel Lateral */}
           <div className="space-y-6">
             <Card>
               <h3 className="font-bold mb-4 text-lg">Controles</h3>
               <div className="space-y-3">
-                <Button
-                  onClick={() => setPaused(!paused)}
-                  variant={paused ? 'success' : 'warning'}
-                  icon={paused ? Play : Pause}
-                >
-                  {paused ? 'Retomar' : 'Pausar'}
-                </Button>
+                 {/* Botões de Produzir/Consumir foram movidos para a área principal */}
                 <Button
                   onClick={handleReset}
                   variant="secondary"
                   icon={RotateCcw}
                 >
-                  Reiniciar
+                  Reiniciar Simulação
                 </Button>
               </div>
             </Card>
@@ -180,48 +216,43 @@ const ProducerConsumerPage = () => {
                 <Slider
                   label="Tamanho do Buffer"
                   value={config.bufferSize}
-                  onChange={(v) => setConfig(prev => ({ ...prev, bufferSize: Math.floor(v) }))}
+                  onChange={(v) => {
+                     // Ao mudar o tamanho, reinicia para evitar inconsistências
+                     handleReset();
+                     setConfig(prev => ({ ...prev, bufferSize: Math.floor(v) }));
+                  }}
                   min={3}
                   max={15}
                   step={1}
+                  unit="" // Remove 's' da unidade
                 />
-                <Slider
-                  label="Taxa de Produção"
-                  value={config.produceRate}
-                  onChange={(v) => setConfig(prev => ({ ...prev, produceRate: v }))}
-                  min={0.3}
-                  max={5}
-                />
-                <Slider
-                  label="Taxa de Consumo"
-                  value={config.consumeRate}
-                  onChange={(v) => setConfig(prev => ({ ...prev, consumeRate: v }))}
-                  min={0.3}
-                  max={5}
-                />
+                 {/* Sliders de Taxa removidos */}
               </div>
             </Card>
 
             <Card>
               <h3 className="font-bold mb-4 text-lg">💡 Conceito</h3>
               <p className="text-sm text-gray-700 leading-relaxed mb-3">
-                O problema <strong>Produtor-Consumidor</strong> demonstra sincronização 
-                entre threads que produzem dados e threads que consomem dados através 
-                de um buffer compartilhado de tamanho fixo.
+                O problema <strong>Produtor-Consumidor</strong> demonstra sincronização
+                entre processos/threads que produzem dados e aqueles que consomem, usando
+                um buffer compartilhado de tamanho fixo.
               </p>
               <div className="p-3 bg-yellow-50 rounded-lg border border-yellow-200 text-xs">
-                <strong>Desafios:</strong>
+                <strong>Desafios (Buffer Limitado):</strong>
                 <ul className="list-disc ml-4 mt-1 space-y-1">
-                  <li>Produtor deve esperar se buffer estiver cheio</li>
-                  <li>Consumidor deve esperar se buffer estiver vazio</li>
-                  <li>Acesso ao buffer deve ser thread-safe</li>
+                  <li>Produtor deve esperar (ou falhar) se o buffer estiver cheio.</li>
+                  <li>Consumidor deve esperar (ou falhar) se o buffer estiver vazio.</li>
+                  <li>Acesso ao buffer deve ser seguro (exclusão mútua se concorrente).</li>
                 </ul>
               </div>
-              <div className="mt-3 p-3 bg-blue-50 rounded-lg border border-blue-200">
+               <p className="text-sm text-gray-700 leading-relaxed mt-3">
+                   Clique nos botões "Produzir" e "Consumir" para observar o comportamento, especialmente quando o buffer está cheio ou vazio.
+               </p>
+              {/* <div className="mt-3 p-3 bg-blue-50 rounded-lg border border-blue-200">
                 <p className="text-xs text-blue-800">
-                  <strong>Técnica:</strong> Semáforos ou Condition Variables
+                  <strong>Técnica de Sincronização:</strong> Semáforos (Cheio, Vazio, Mutex) ou Monitores/Condition Variables.
                 </p>
-              </div>
+              </div> */}
             </Card>
           </div>
         </div>

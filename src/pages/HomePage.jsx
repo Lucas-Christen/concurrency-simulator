@@ -1,80 +1,90 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { TrafficCone, Book, Factory, UtensilsCrossed, Zap, ArrowRight, Lock, Shield } from 'lucide-react';
+import { TrafficCone, Book, Factory, UtensilsCrossed, Zap, ArrowRight, Lock, Shield, ListChecks } from 'lucide-react'; // <-- Adicionar ListChecks
 import Card from '../components/Card';
 
 const HomePage = () => {
   const navigate = useNavigate();
-  
+
   const simulations = [
-    {
-      title: 'Semáforos de Trânsito',
-      description: 'Demonstra exclusão mútua com mutex/condition',
-      icon: TrafficCone,
-      color: 'bg-red-500',
-      path: '/semaforos'
-    },
-    {
-      title: 'Biblioteca',
-      description: 'Pool de recursos com semáforo contador',
-      icon: Book,
-      color: 'bg-blue-500',
-      path: '/biblioteca'
-    },
-    {
-      title: 'Produtor-Consumidor',
-      description: 'Problema clássico de sincronização',
-      icon: Factory,
-      color: 'bg-green-500',
-      path: '/produtor-consumidor'
-    },
-    {
-      title: 'Filósofos Jantando',
-      description: 'Demonstração de deadlock e solução',
-      icon: UtensilsCrossed,
-      color: 'bg-purple-500',
-      path: '/filosofos'
-    },
-    {
-      title: 'Concorrência vs Paralelismo',
-      description: 'Visualização da diferença conceitual',
-      icon: Zap,
-      color: 'bg-yellow-500',
-      path: '/concorrencia-paralelismo'
-    },
-    {
-      title: 'Mutex (Exclusão Mútua)',
-      description: 'Controle de acesso à região crítica',
-      icon: Lock,
-      color: 'bg-indigo-500',
-      path: '/mutex'
-    },
-    {
-      title: 'Barreiras de Sincronização',
-      description: 'Threads esperam umas pelas outras',
-      icon: Shield,
-      color: 'bg-pink-500',
-      path: '/barreira'
-    },
+    // ... (simulações existentes) ...
+     {
+       title: 'Semáforos de Trânsito',
+       description: 'Demonstra exclusão mútua com mutex/condition',
+       icon: TrafficCone,
+       color: 'bg-red-500',
+       path: '/semaforos'
+     },
+     {
+       title: 'Biblioteca',
+       description: 'Pool de recursos com semáforo contador',
+       icon: Book,
+       color: 'bg-blue-500',
+       path: '/biblioteca'
+     },
+     {
+       title: 'Produtor-Consumidor',
+       description: 'Problema clássico de sincronização',
+       icon: Factory,
+       color: 'bg-green-500',
+       path: '/produtor-consumidor'
+     },
+     {
+       title: 'Filósofos Jantando',
+       description: 'Demonstração de deadlock e solução',
+       icon: UtensilsCrossed,
+       color: 'bg-purple-500',
+       path: '/filosofos'
+     },
+     {
+       title: 'Concorrência vs Paralelismo',
+       description: 'Visualização da diferença conceitual',
+       icon: Zap,
+       color: 'bg-yellow-500',
+       path: '/concorrencia-paralelismo'
+     },
+     {
+       title: 'Mutex (Exclusão Mútua)',
+       description: 'Controle de acesso à região crítica',
+       icon: Lock,
+       color: 'bg-indigo-500',
+       path: '/mutex'
+     },
+     {
+       title: 'Barreiras de Sincronização',
+       description: 'Threads esperam umas pelas outras',
+       icon: Shield,
+       color: 'bg-pink-500',
+       path: '/barreira'
+     },
+     { // <-- Novo Card
+       title: 'Lista Estática vs Dinâmica',
+       description: 'Visualização da alocação de memória',
+       icon: ListChecks,
+       color: 'bg-teal-500',
+       path: '/listas'
+     },
   ];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-8">
       <div className="max-w-7xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-12"
-        >
-          <h1 className="text-6xl font-bold text-gray-800 mb-4">
-            🔄 Simulador de Concorrência
-          </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Aprenda conceitos de concorrência e sincronização através de 
-            simulações visuais e interativas
-          </p>
-        </motion.div>
+        {/* ... (cabeçalho existente) ... */}
+         <motion.div
+           initial={{ opacity: 0, y: -20 }}
+           animate={{ opacity: 1, y: 0 }}
+           className="text-center mb-12"
+         >
+           <h1 className="text-6xl font-bold text-gray-800 mb-4">
+             🔄 Simulador de Concorrência
+           </h1>
+           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+             Aprenda conceitos de concorrência e sincronização através de
+             simulações visuais e interativas
+           </p>
+         </motion.div>
+
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
           {simulations.map((sim, index) => (
@@ -93,7 +103,7 @@ const HomePage = () => {
                 </div>
                 <h3 className="text-2xl font-bold mb-2 text-gray-800">{sim.title}</h3>
                 <p className="text-gray-600 mb-4">{sim.description}</p>
-                <div className="mt-4 flex items-center text-blue-500 font-semibold">
+                <div className="mt-auto pt-4 flex items-center text-blue-500 font-semibold"> {/* Use mt-auto pt-4 */}
                   Explorar <ArrowRight size={18} className="ml-2" />
                 </div>
               </Card>
@@ -101,29 +111,30 @@ const HomePage = () => {
           ))}
         </div>
 
-        <Card>
-          <h2 className="text-2xl font-bold mb-4 text-gray-800">Sobre o Simulador</h2>
-          <p className="text-gray-700 leading-relaxed mb-4">
-            Este simulador foi criado para facilitar o aprendizado de conceitos de 
-            <strong> concorrência e sincronização</strong> através de visualizações interativas.
-            Cada simulação demonstra um problema clássico da ciência da computação, permitindo
-            que você ajuste parâmetros e observe o comportamento em tempo real.
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
-            <div className="bg-blue-50 p-4 rounded-lg">
-              <h3 className="font-bold text-blue-800 mb-2">🎮 Interativo</h3>
-              <p className="text-sm text-gray-600">Controle a velocidade, pause e reinicie as simulações</p>
-            </div>
-            <div className="bg-green-50 p-4 rounded-lg">
-              <h3 className="font-bold text-green-800 mb-2">👁️ Visual</h3>
-              <p className="text-sm text-gray-600">Veja os conceitos ganharem vida com animações</p>
-            </div>
-            <div className="bg-purple-50 p-4 rounded-lg">
-              <h3 className="font-bold text-purple-800 mb-2">📚 Educacional</h3>
-              <p className="text-sm text-gray-600">Cada exemplo explica o conceito por trás</p>
-            </div>
-          </div>
-        </Card>
+        {/* ... (card "Sobre o Simulador" existente) ... */}
+         <Card>
+           <h2 className="text-2xl font-bold mb-4 text-gray-800">Sobre o Simulador</h2>
+           <p className="text-gray-700 leading-relaxed mb-4">
+             Este simulador foi criado para facilitar o aprendizado de conceitos de
+             <strong> concorrência e sincronização</strong> através de visualizações interativas.
+             Cada simulação demonstra um problema clássico da ciência da computação, permitindo
+             que você ajuste parâmetros e observe o comportamento em tempo real.
+           </p>
+           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+             <div className="bg-blue-50 p-4 rounded-lg">
+               <h3 className="font-bold text-blue-800 mb-2">🎮 Interativo</h3>
+               <p className="text-sm text-gray-600">Controle a velocidade, pause e reinicie as simulações</p>
+             </div>
+             <div className="bg-green-50 p-4 rounded-lg">
+               <h3 className="font-bold text-green-800 mb-2">👁️ Visual</h3>
+               <p className="text-sm text-gray-600">Veja os conceitos ganharem vida com animações</p>
+             </div>
+             <div className="bg-purple-50 p-4 rounded-lg">
+               <h3 className="font-bold text-purple-800 mb-2">📚 Educacional</h3>
+               <p className="text-sm text-gray-600">Cada exemplo explica o conceito por trás</p>
+             </div>
+           </div>
+         </Card>
       </div>
     </div>
   );

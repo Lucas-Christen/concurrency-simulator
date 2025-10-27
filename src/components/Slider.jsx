@@ -1,11 +1,13 @@
 import React from 'react';
 
-const Slider = ({ label, value, onChange, min, max, step = 0.1 }) => {
+// Atualizado para incluir a prop 'unit'
+const Slider = ({ label, value, onChange, min, max, step = 0.1, unit = 's' }) => {
   return (
     <div className="space-y-2">
       <div className="flex justify-between text-sm">
         <span className="font-medium text-gray-700">{label}</span>
-        <span className="text-gray-600 font-semibold">{value.toFixed(1)}s</span>
+        {/* Mostra unidade apenas se ela existir */}
+        <span className="text-gray-600 font-semibold">{value.toFixed(unit ? 1 : 0)}{unit}</span>
       </div>
       <input
         type="range"
